@@ -1,0 +1,42 @@
+#include "mlu.h"
+
+#define ONELINE 8192
+#define N  8
+__mlu_entry__ void ex1Kernel(half* input, half* input2, half* output, int32_t len)
+{
+
+  __nram__ int32_t quotient = len / ONELINE;
+  __nram__ int32_t rem = len % ONELINE;
+  __nram__ half input_nram[ONELINE];
+  __nram__ half input2_nram[ONELINE];
+  __nram__ half temp1_nram[ONELINE];
+  __nram__ half temp2_nram[ONELINE];
+  __nram__ half const_nram[ONELINE];
+
+  __nramset_half(const_nram, ONELINE, 1);
+  __nramset_half(temp2_nram, ONELINE, 0.0);
+  if (rem != 0)
+  {
+    quotient +=1;
+  } 
+
+  for (int32_t i = 0; i < quotient; i++)
+  {
+    __memcpy(input_nram, input + i * ONELINE, ONELINE * sizeof(half), GDRAM2NRAM);
+    __memcpy(input2_nram, input2 + i * ONELINE, ONELINE * sizeof(half), GDRAM2NRAM);
+    __nramset_half(temp1_nram, ONELINE, 7.0);//t0=0
+    for (int32_t j = 1; j <= N;j++)
+    {
+      __bang_mul_const(temp2_nram, temp1_nram, -1.0, ONELINE);
+      __bang_active_exp(temp2_nram, temp2_nram, ONELINE);// exp(-tn)
+      __bang_mul(temp2_nram, input_nram, temp2_nram, ONELINE);// x*exp(-tn)
+      __bang_add(temp1_nram, temp1_nram, temp2_nram, ONELINE);// tn + x*exp(-tn)
+      __bang_sub(temp1_nram, temp1_nram, const_nram, ONELINE);// tn + x*exp(-tn) -1
+    }
+    __bang_sub(input2_nram, input_nram, input2_nram, ONELINE);// x-y
+    __bang_mul(input2_nram, input2_nram, input2_nram, ONELINE);//(x-y)^2
+    __bang_active_recip(input2_nram, input2_nram, ONELINE);// 1/(x-y)^2
+    __bang_mul(temp1_nram, temp1_nram, input2_nram, ONELINE);//ln(x)/(x-y)^2
+    __memcpy(output +i * ONELINE, temp1_nram, ONELINE * sizeof(half), NRAM2GDRAM); 
+  }
+}

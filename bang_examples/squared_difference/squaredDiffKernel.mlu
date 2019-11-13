@@ -1,0 +1,25 @@
+#include "mlu.h"
+
+#define ONELINE 256
+
+__mlu_entry__ void SquaredDiffKernel(half* input1, half* input2, half* output, int32_t len)
+{
+  __nram__ int32_t quotient = len / ONELINE;
+  __nram__ int32_t rem = len % ONELINE;
+  __nram__ half input1_nram[ONELINE];
+  __nram__ half input2_nram[ONELINE];
+
+  if ( rem != 0)
+  {
+    quotient +=1;
+  }
+  for (int32_t i = 0; i < quotient; i++)
+  {
+    __memcpy(input1_nram, input1 + i * ONELINE, ONELINE * sizeof(half), GDRAM2NRAM);
+    __memcpy(input2_nram, input2 + i * ONELINE, ONELINE * sizeof(half), GDRAM2NRAM);
+    __bang_sub(input1_nram, input1_nram, input2_nram, ONELINE); 
+    __bang_mul(input1_nram, input1_nram, input1_nram, ONELINE);
+    __memcpy(output +i * ONELINE, input1_nram, ONELINE * sizeof(half), NRAM2GDRAM); 
+  }
+
+}

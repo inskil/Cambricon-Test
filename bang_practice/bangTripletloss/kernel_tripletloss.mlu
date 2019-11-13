@@ -1,0 +1,9 @@
+#include "mlu.h"
+#include "marco.h"
+#define EPS 0.0001
+#define MARGIN 0.5
+
+__mlu_func__ void __bang_abs( half* src) 
+{
+
+}

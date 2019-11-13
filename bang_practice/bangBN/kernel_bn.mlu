@@ -1,0 +1,11 @@
+#include "mlu.h"
+#include "marco.h"
+#define EPS 0.0001
+#define BETA 0.5
+#define DEBUG_PRINT 1
+
+__mlu_entry__ void bnKernel(half* input, half* output)
+{
+
+}
+
