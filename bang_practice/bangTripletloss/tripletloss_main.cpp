@@ -38,8 +38,8 @@ int test(float* dataA, float* dataP, float* dataN){
   // 打印测试结果
   for(int i=0; i<N; i++){
 #if DEBUG_PRINT
-        printf("%f ",answer[i]);
-        printf("%f \n",answer_cpu[i]);
+        printf("myas : %f ",answer[i]);
+        printf("cpuas : %f \n",answer_cpu[i]);
 #endif
 	   err+=fabs(answer[i]-answer_cpu[i]);
 	   cpu_sum+=fabs(answer_cpu[i]);
@@ -72,9 +72,13 @@ int main(){
     data3[i] = 2;
     data4[i] = 0;
   }
+  printf("+++++++++++++++++test1++++++++++++++++++++\n");
   test(data1,data2,data3); 
+  printf("+++++++++++++++++test2++++++++++++++++++++\n");
   test(data1,data2,data4); 
+  printf("+++++++++++++++++test3++++++++++++++++++++\n");
   test(data3,data1,data1); 
+  printf("+++++++++++++++++test4++++++++++++++++++++\n");
   test(data1,data1,data1); 
   for (int i = 0; i < LEN; i++) {
     data1[i] = (float)(rand()%10)-5;
@@ -84,8 +88,10 @@ int main(){
     fscanf(f_input_a, "%f\n", &dataP[i]);
     fscanf(f_input_a, "%f\n", &dataN[i]);
   }
+  printf("+++++++++++++++++test5++++++++++++++++++++\n");
   test(data1,data2,data3); 
   // 0 err above, because all the data are interger
+  printf("+++++++++++++++++test6++++++++++++++++++++\n");
   test(dataA,dataP,dataN); 
   return 0;
 }

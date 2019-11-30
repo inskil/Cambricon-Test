@@ -40,25 +40,6 @@ __mlu_entry__ void CosineKernel(half *inputX, half *inputY, half *output)
         __memcpy(inputY_nram + i * ONELINE, inputY + i * ONELINE, ONELINE * sizeof(half), GDRAM2NRAM);
     }
 
-    // for (int32_t i = 0; i < ONELINE; i++)
-    // {
-    //     __bang_printf(" the input in mlu  : %f \n", inputX[i]);
-    // }
-
-    // __bang_transpose(tans_nram, inputX_nram, ONELINE, ONELINE);
-    // __memcpy(inputX_nram, tans_nram, INPUTSIZE * sizeof(half), NRAM2NRAM);
-
-    // __bang_transpose(tans_nram, inputY_nram, ONELINE, ONELINE);
-    // __memcpy(inputY_nram, tans_nram, INPUTSIZE * sizeof(half), NRAM2NRAM);
-
-    // for (int32_t i = 0; i < 5; i++)
-    // {
-    //     __bang_printf(" the ans in nran X :%f\n", inputX_nram[i]);
-    // }
-    // for (int32_t i = 0; i < 5; i++)
-    // {
-    //     __bang_printf(" the ans in nran Y :%f\n", inputX_nram[i]);
-    // }
 
     // calculate sum (Xi * Yi)
     for (int32_t i = 0; i < M; i++)
@@ -96,10 +77,6 @@ __mlu_entry__ void CosineKernel(half *inputX, half *inputY, half *output)
 
     __bang_mul(temp3_nram, tempXY_nram, temp2_nram, ONELINE); // XY / XX*
 
-    // for (int32_t i = 0; i < ONELINE; i++)
-    // {
-    //     __bang_printf(" the ans in nran :%hf\n", temp2_nram[i]);
-    // }
 
     for (int32_t i = 0; i < ONELINE; i++)
     {
