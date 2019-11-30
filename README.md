@@ -12,7 +12,7 @@ Cambricon-Test for BANG as a homework
 
 #### 代码
 
-[项目地址](https://github.com/inskil/Cambricon-Test/tree/master/bang_practice/bangConsine)
+[项目地址](https://github.com/inskil/Cambricon-Test/tree/master/bang_practice/bangCosine)
 
 核心代码：
 
@@ -178,7 +178,8 @@ __bang_transpose(tans_nram, result_nram, N, M);
 
 #### 代码
 
-[项目地址](https://github.com/inskil/Cambricon-Test/tree/master/bang_practice/bangTripleloss)
+[项目地址](https://github.com/inskil/Cambricon-Test/tree/master/bang_practice/bangTripletloss)
+
 核心代码：
 
 ```c {.line-numbers}
@@ -216,6 +217,7 @@ __bang_add(tempb_nram, tempa_nram, const_nram, ONELINE); // tempa += margin
 ```
 
 #### 结果
+
     M: 128
     N: 256
     LEN: 32768
